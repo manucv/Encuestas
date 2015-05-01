@@ -1,0 +1,78 @@
+<?php echo $this->doctype(); ?>
+<html lang="en">
+
+<head>
+<meta charset="utf-8">
+	<?php
+
+echo $this->headMeta()
+    ->appendName('viewport', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no')
+    ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')?>
+	<?php echo $this->headTitle('Sistema integral para el control de gastos')?>
+
+    <?php echo $this->partial('partial/cssPortal')?>
+</head>
+
+<!--TIPS-->
+<!--You may remove all ID or Class names which contain "demo-", they are only used for demonstration. -->
+
+<body>
+	<div id="container" class="effect mainnav-lg">
+		
+		<?php echo $this->partial('partial/header')?>
+
+	<div class="boxed">
+
+			<!--CONTENT CONTAINER-->
+			<!--===================================================-->
+			<div id="content-container">
+
+				<!--Page Title-->
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+				<!-- 
+				<div id="page-title">
+					<h1 class="page-header text-overflow">Dashboard</h1>
+				</div>
+				 -->
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+				<!--End page title-->
+
+
+				<!--Breadcrumb-->
+				<!--~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+				<ol class="breadcrumb">
+					<li><a href="#">Home</a></li>
+					<li><a href="#">Library</a></li>
+					<li class="active">Data</li>
+				</ol>
+				~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
+				<!--End breadcrumb-->
+
+				<!--Page content-->
+				<!--===================================================-->
+				<div id="page-content">
+        <?php echo $this->content; ?>
+        </div>
+				<!--===================================================-->
+				<!--End page content-->
+			</div>
+			<!--===================================================-->
+			<!--END CONTENT CONTAINER-->
+        
+        <?php echo $this->partial('partial/menu')?>
+		<!-- SCROLL TOP BUTTON -->
+			<!--===================================================-->
+			<button id="scroll-top" class="btn">
+				<i class="fa fa-chevron-up"></i>
+			</button>
+			<!--===================================================-->
+
+		</div>
+		<!--===================================================-->
+		<!-- END OF CONTAINER -->
+
+	<?php echo $this->partial('partial/jsPortal')?>
+
+
+</body>
+</html>

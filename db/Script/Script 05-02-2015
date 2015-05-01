@@ -1,0 +1,173 @@
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='TRADITIONAL,ALLOW_INVALID_DATES';
+
+CREATE SCHEMA IF NOT EXISTS `registro_seguros` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;
+USE `registro_seguros` ;
+
+-- -----------------------------------------------------
+-- Table `registro_seguros`.`aseguradora`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `registro_seguros`.`aseguradora` ;
+
+CREATE TABLE IF NOT EXISTS `registro_seguros`.`aseguradora` (
+  `ase_id` INT NOT NULL AUTO_INCREMENT,
+  `ase_nombre` VARCHAR(75) NOT NULL,
+  PRIMARY KEY (`ase_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `registro_seguros`.`usuario`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `registro_seguros`.`usuario` ;
+
+CREATE TABLE IF NOT EXISTS `registro_seguros`.`usuario` (
+  `usu_id` VARCHAR(25) NOT NULL,
+  `usu_email` VARCHAR(150) NOT NULL,
+  `usu_nombre` VARCHAR(35) NOT NULL,
+  `usu_apellido` VARCHAR(35) NOT NULL,
+  `usu_clave` CHAR(32) NOT NULL,
+  `usu_estado` CHAR(1) NOT NULL,
+  `usu_codigo_secreto` CHAR(32) NOT NULL,
+  `aseguradora_ase_id` INT NULL,
+  `usu_ultima_fecha_conexion` DATETIME NOT NULL,
+  PRIMARY KEY (`usu_id`),
+  CONSTRAINT `fk_usuario_aseguradora`
+    FOREIGN KEY (`aseguradora_ase_id`)
+    REFERENCES `registro_seguros`.`aseguradora` (`ase_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE INDEX `fk_usuario_aseguradora_idx` ON `registro_seguros`.`usuario` (`aseguradora_ase_id` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `registro_seguros`.`rol`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `registro_seguros`.`rol` ;
+
+CREATE TABLE IF NOT EXISTS `registro_seguros`.`rol` (
+  `rol_id` INT NOT NULL AUTO_INCREMENT,
+  `rol_nombre` VARCHAR(25) NULL,
+  PRIMARY KEY (`rol_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `registro_seguros`.`rol_usuario`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `registro_seguros`.`rol_usuario` ;
+
+CREATE TABLE IF NOT EXISTS `registro_seguros`.`rol_usuario` (
+  `rol_rol_id` INT NOT NULL,
+  `usuario_usu_id` VARCHAR(25) NOT NULL,
+  CONSTRAINT `fk_rol_usuario_rol1`
+    FOREIGN KEY (`rol_rol_id`)
+    REFERENCES `registro_seguros`.`rol` (`rol_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_rol_usuario_usuario1`
+    FOREIGN KEY (`usuario_usu_id`)
+    REFERENCES `registro_seguros`.`usuario` (`usu_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE INDEX `fk_rol_usuario_rol1_idx` ON `registro_seguros`.`rol_usuario` (`rol_rol_id` ASC);
+
+CREATE INDEX `fk_rol_usuario_usuario1_idx` ON `registro_seguros`.`rol_usuario` (`usuario_usu_id` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `registro_seguros`.`cliente`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `registro_seguros`.`cliente` ;
+
+CREATE TABLE IF NOT EXISTS `registro_seguros`.`cliente` (
+  `cli_id` INT NOT NULL AUTO_INCREMENT,
+  `cli_nombre` VARCHAR(35) NOT NULL,
+  `cli_apellido` VARCHAR(35) NOT NULL,
+  `cli_tipo_documento` CHAR(1) NOT NULL,
+  `cli_cedula_pasaporte` VARCHAR(13) NOT NULL,
+  `cli_email` VARCHAR(150) NOT NULL,
+  `cli_direccion` VARCHAR(150) NOT NULL,
+  `cli_telefono` VARCHAR(15) NOT NULL,
+  PRIMARY KEY (`cli_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `registro_seguros`.`producto`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `registro_seguros`.`producto` ;
+
+CREATE TABLE IF NOT EXISTS `registro_seguros`.`producto` (
+  `pro_id` INT NOT NULL,
+  `pro_nombre` VARCHAR(75) NOT NULL,
+  PRIMARY KEY (`pro_id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `registro_seguros`.`historial`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `registro_seguros`.`historial` ;
+
+CREATE TABLE IF NOT EXISTS `registro_seguros`.`historial` (
+  `his_id` INT NOT NULL AUTO_INCREMENT,
+  `aseguradora_ase_id` INT NOT NULL,
+  `his_fecha` DATE NOT NULL,
+  `cliente_cli_id` INT NOT NULL,
+  `producto_pro_id` INT NOT NULL,
+  PRIMARY KEY (`his_id`),
+  CONSTRAINT `fk_historial_aseguradora1`
+    FOREIGN KEY (`aseguradora_ase_id`)
+    REFERENCES `registro_seguros`.`aseguradora` (`ase_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_historial_cliente1`
+    FOREIGN KEY (`cliente_cli_id`)
+    REFERENCES `registro_seguros`.`cliente` (`cli_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_historial_producto1`
+    FOREIGN KEY (`producto_pro_id`)
+    REFERENCES `registro_seguros`.`producto` (`pro_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE INDEX `fk_historial_aseguradora1_idx` ON `registro_seguros`.`historial` (`aseguradora_ase_id` ASC);
+
+CREATE INDEX `fk_historial_cliente1_idx` ON `registro_seguros`.`historial` (`cliente_cli_id` ASC);
+
+CREATE INDEX `fk_historial_producto1_idx` ON `registro_seguros`.`historial` (`producto_pro_id` ASC);
+
+
+-- -----------------------------------------------------
+-- Table `registro_seguros`.`detalle_historia`
+-- -----------------------------------------------------
+DROP TABLE IF EXISTS `registro_seguros`.`detalle_historia` ;
+
+CREATE TABLE IF NOT EXISTS `registro_seguros`.`detalle_historia` (
+  `det_his_id` INT NOT NULL AUTO_INCREMENT,
+  `det_his_fecha` DATE NOT NULL,
+  `det_his_descripcion` TEXT NOT NULL,
+  `historial_his_id` INT NOT NULL,
+  PRIMARY KEY (`det_his_id`),
+  CONSTRAINT `fk_detalle_historia_historial1`
+    FOREIGN KEY (`historial_his_id`)
+    REFERENCES `registro_seguros`.`historial` (`his_id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+CREATE INDEX `fk_detalle_historia_historial1_idx` ON `registro_seguros`.`detalle_historia` (`historial_his_id` ASC);
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+

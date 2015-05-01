@@ -1,0 +1,21 @@
+
+<!-- begin breadcrumb -->
+<ol class="breadcrumb pull-right">
+	<!-- 
+				<li><a href="javascript:;">Home</a></li>
+				<li class="active">Dashboard</li>
+				 -->
+				<?php
+    $contNav = 0;
+    foreach ($this->ruta as $rowNav => $valNav) {
+        if ($contNav == 0) {
+            echo '<li><i class="ace-icon fa fa-home home-icon"></i> ' . $valNav . '</li>';
+        } else {
+            echo '<li class="active">' . $valNav . '</li>';
+        }
+        $contNav ++;
+    }
+    $contNav = 0;
+    ?>
+			</ol>
+<!-- end breadcrumb -->

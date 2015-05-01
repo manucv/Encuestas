@@ -1,0 +1,99 @@
+	<!--JAVASCRIPT-->
+	<!--=================================================-->
+
+	<!--jQuery [ REQUIRED ]-->
+	<script src="<?php echo $this->basepath() . '/template/js/jquery-2.1.1.min.js'?>"></script>
+
+
+	<!--BootstrapJS [ RECOMMENDED ]-->
+	<script src="<?php echo $this->basepath() . '/template/js/bootstrap.min.js'?>"></script>
+
+
+	<!--Fast Click [ OPTIONAL ]-->
+	<script src="<?php echo $this->basepath() . '/template/plugins/fast-click/fastclick.min.js'?>"></script>
+
+	
+	<!--Nifty Admin [ RECOMMENDED ]-->
+	<script src="<?php echo $this->basepath() . '/template/js/nifty.min.js'?>"></script>
+
+
+	<!--Morris.js [ OPTIONAL ]-->
+	<script src="<?php echo $this->basepath() . '/template/plugins/morris-js/morris.min.js'?>"></script>
+	<script src="<?php echo $this->basepath() . '/template/plugins/morris-js/raphael-js/raphael.min.js'?>"></script>
+
+
+	<!--Sparkline [ OPTIONAL ]-->
+	<script src="<?php echo $this->basepath() . '/template/plugins/sparkline/jquery.sparkline.min.js'?>"></script>
+
+
+	<!--Skycons [ OPTIONAL ]-->
+	<script src="<?php echo $this->basepath() . '/template/plugins/skycons/skycons.min.js'?>"></script>
+
+
+	<!--Switchery [ OPTIONAL ]-->
+	<script src="<?php echo $this->basepath() . '/template/plugins/switchery/switchery.min.js'?>"></script>
+
+
+	<!--Bootstrap Select [ OPTIONAL ]-->
+	<script src="<?php echo $this->basepath() . '/template/plugins/bootstrap-select/bootstrap-select.min.js'?>"></script>
+
+	<!--Widget [ SAMPLE ]-->
+	<script src="<?php echo $this->basepath() . '/template/js/demo/widgets.js'?>"></script>
+	
+	<!--DataTables [ OPTIONAL ]-->
+	<script src="<?php echo $this->basepath() . '/template/plugins/datatables/media/js/jquery.dataTables.js'?>"></script>
+	
+	<script src="<?php echo $this->basepath() . '/template/plugins/datatables/media/js/dataTables.bootstrap.js'?>"></script>
+	
+	<script src="<?php echo $this->basepath() . '/template/plugins/datatables/extensions/Responsive/js/dataTables.responsive.min.js'?>"></script>
+
+	<!--Demo script [ DEMONSTRATION ]-->
+	<script src="<?php echo $this->basepath() . '/template/js/demo/nifty-demo.min.js'?>"></script>
+	
+	<!--DataTables Sample [ SAMPLE ]-->
+	<script src="<?php echo $this->basepath() . '/template/js/demo/tables-datatables.js'?>"></script>
+	
+	<!--Specify page [ SAMPLE ]-->
+	<script src="<?php echo $this->basepath() . '/template/js/demo/dashboard.js'?>"></script>
+	
+	<script>
+    $(document).ready(function(){
+
+    	var navbarFixedCheckbox = $('#demo-navbar-fixed');
+    	var navFixedCheckbox = $('#demo-nav-fixed');
+    	
+    	// Fixed Position
+    	// =================================================================
+    	navbarFixedCheckbox.ready(function () {
+    		nifty.container.addClass('navbar-fixed');
+    	});
+
+    	navFixedCheckbox.ready(function () {
+    		$.niftyNav('fixedPosition');
+    	});
+
+    });
+
+	</script>
+
+	<!--
+
+	REQUIRED
+	You must include this in your project.
+
+	RECOMMENDED
+	This category must be included but you may modify which plugins or components which should be included in your project.
+
+	OPTIONAL
+	Optional plugins. You may choose whether to include it in your project or not.
+
+	DEMONSTRATION
+	This is to be removed, used for demonstration purposes only. This category must not be included in your project.
+
+	SAMPLE
+	Some script samples which explain how to initialize plugins or components. This category should not be included in your project.
+
+
+	Detailed information and more samples can be found in the document.
+
+	-->

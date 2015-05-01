@@ -1,0 +1,182 @@
+<div class="row">
+	<div class="col-lg-5">
+		<!--Profile Heading-->
+		<!--===================================================-->
+		<div class="panel">
+			<?php if($this->cliente->getCli_critico() == 'A'): ?>
+		      <div class="bg-success" style="height: 70px;">&nbsp;</div>
+			<?php elseif($this->cliente->getCli_critico() == 'B'): ?>
+			  <div class="bg-danger" style="height: 70px;">&nbsp;</div>
+			<?php else: ?>
+			  <div class="bg-warning" style="height: 70px;">&nbsp;</div>
+			<?php endif; ?>
+			
+			<div class="panel-media" style="box-shadow: 0px 0px 0px 0px !important;">
+			<?php $sexo = $this->cliente->getCli_sexo(); if($sexo == 'M'):?>
+				<img src="<?php echo $this->basepath() . '/template/img/av1.png'?>" class="panel-media-img img-circle img-border-light" alt="Profile Picture" />
+			<?php else: ?>
+			    <img src="<?php echo $this->basepath() . '/template/img/av6.png'?>" class="panel-media-img img-circle img-border-light" alt="Profile Picture" />
+			<?php endif; ?>
+					
+				<div class="row">
+					<div class="col-lg-7">
+						<h3 class="panel-media-heading"><?php echo $this->cliente->getCli_nombre() . ' ' . $this->cliente->getCli_apellido()?></h3>
+						<a href="#" class="btn-link"><?php echo $this->cliente->getCli_email() ?></a>
+						<p class="text-muted mar-btm"><strong><?php echo $this->cliente->getCli_tipo_documento()=='C' ? 'C&eacute;dula: ' : 'Pasaporte: ' ?></strong><?php echo $this->cliente->getCli_cedula_pasaporte() ?></p>
+					</div>
+					<div class="col-lg-5 text-center">
+						  <?php if($this->cliente->getCli_critico() == 'A'): ?>
+						      <span class="icon-wrap icon-wrap-sm icon-circle bg-success"> 
+						          <i class="fa fa-check fa-2x"></i>
+						      </span>
+						  <?php elseif($this->cliente->getCli_critico() == 'B'): ?>
+						      <span class="icon-wrap icon-wrap-sm icon-circle bg-danger"> 
+						          <i class="fa fa-times fa-2x"></i>
+						      </span>
+						  <?php else: ?>
+						      <span class="icon-wrap icon-wrap-sm icon-circle bg-warning"> 
+						          <i class="fa fa-minus fa-2x"></i>
+						      </span>
+						  <?php endif; ?>
+					</div>
+				</div>
+			</div>
+			<div class="panel-body">
+			    <h4>Otros datos informativos</h4>
+				<div><strong>Tel&eacute;fono:</strong> <?php echo $this->cliente->getCli_telefono() ?></div>
+				<div><strong>Direcci&oacute;n:</strong> <?php echo $this->cliente->getCli_direccion() ?></div>
+				
+				<?php 
+				$aseguradorasActivas = array();
+				$aseguradorasInactivas = array();
+				
+				foreach ($this->aseguradoraCliente as $aseguradoras):
+				    if($aseguradoras->getAse_cli_estado() == 'A'):
+				        $aseguradorasActivas[$aseguradoras->getAseguradora_ase_id()]['nombre'] = $aseguradoras->getAse_nombre();
+				        $aseguradorasActivas[$aseguradoras->getAseguradora_ase_id()]['logo'] = $aseguradoras->getAse_logo();
+				    else:
+				        $aseguradorasInactivas[$aseguradoras->getAseguradora_ase_id()]['nombre'] = $aseguradoras->getAse_nombre();
+				        $aseguradorasInactivas[$aseguradoras->getAseguradora_ase_id()]['logo'] = $aseguradoras->getAse_logo();
+				    endif;
+				endforeach;
+				?>
+				<br />
+				<h4>Aseguradora(s) Actual(s)</h4>
+				<div class="row col-lg-12">
+				<?php 
+				foreach ($aseguradorasActivas as $activas => $row):
+				    foreach ($row as $llave => $valor):
+				        if(strtolower($llave) == 'logo'):?>
+				        <div class="col-lg-12" style="padding: 10px;">
+				            <img src="<?php echo $this->basepath() . '/img/jpg/' . $valor ?>" />
+				        </div>
+				        <?php endif; 
+				    endforeach;
+				endforeach;?>
+				<br />
+				<br />
+				</div>
+				<h4>Aseguradora(s) Pasadas(s)</h4>
+				<div class="row col-lg-12">
+				<?php 
+				foreach ($aseguradorasInactivas as $inactivas => $rowi):
+				    foreach ($rowi as $llavei => $valori):
+				        if(strtolower($llavei) == 'logo'):?>
+				        <div class="col-lg-6" style="padding: 10px;">
+				            <img src="<?php echo $this->basepath() . '/img/jpg/' . $valori ?>" />
+				        </div>
+				        <?php endif; 
+				    endforeach;
+				endforeach;?>
+				</div>
+			</div>
+		</div>
+		<!--===================================================-->
+
+	</div>
+	<div class="col-lg-7">
+		<div class="panel panel-body">
+			<!-- Timeline -->
+			<!--===================================================-->
+			<div class="timeline">
+
+				<?php foreach ($this->aseguradoraCliente as $aseCliHistoria):?>
+				<div class="timeline-header">
+					<div class="timeline-header-title"><img src="<?php echo $this->basepath() . '/img/jpg/' . $aseCliHistoria->getAse_logo()?>" /></div>
+				</div>
+				    <?php 
+				    $cont = 0;
+				    if(count($this->historial)):
+				    foreach ($this->historial as $historia => $valorHistoria ): ?>
+				        <?php
+				        if(count($valorHistoria) > 0):
+				            if($valorHistoria[$cont]['aseguradora_cliente_aseguradora_ase_id'] == $aseCliHistoria->getAseguradora_ase_id()):?>
+				            <div class="timeline-header">
+					           <div class="timeline-header-title bg-mint"><?php echo $valorHistoria[$cont]['his_fecha']; ?></div>
+				            </div>
+				            
+				            <?php 
+				            $contDetHis = 0;
+				            //Comienzo del detalle de la historia de un cliente en una seguradora
+				            //La variable $detHis contiene el id de la historia -> his_id
+				            foreach ($this->detalleHistorial as $detHis => $valDetHis):
+				                if($detHis == $valorHistoria[$cont]['his_id']): ?>
+        				            <div class="timeline-entry">
+                    					<div class="timeline-stat">
+                    						<div class="timeline-icon bg-danger">
+                    							<i class="fa fa-car fa-lg"></i>
+                    						</div>
+                    						<div class="timeline-time"><?php echo $valDetHis[$contDetHis]['det_his_fecha']?></div>
+                    					</div>
+                    					<div class="timeline-label">
+                    						<h4 class="mar-no pad-btm">
+                    							<a href="#" class="text-danger">Producto: <?php echo $valDetHis[$contDetHis]['producto_pro_id']?></a>
+                    						</h4>
+                    						<p><?php echo $valDetHis[$contDetHis]['det_his_descripcion']?></p>
+                    						<div class="img-holder">
+                    							<img src="<?php echo $this->basepath() . '/template/img/thumbs/img2.jpg'?>" alt="Image">
+                    							<br /><br />
+                    							<img src="<?php echo $this->basepath() . '/template/img/thumbs/img2.jpg'?>" alt="Image">
+                    						</div>
+                    					</div>
+                    				</div>
+				            <?php endif; 
+				            $contDetHis++; 
+				            endforeach; ?>
+				            
+				            
+                      <?php else: ?>
+                      <div class="timeline-entry">
+    					<div class="timeline-stat">
+    						<div class="timeline-icon bg-success">
+    							<i class="fa fa-thumbs-up fa-lg"></i>
+    						</div>
+    					</div>
+    					<div class="timeline-label">
+                            <strong>No registra historial negativo.</strong>
+    					</div>
+    				  </div>
+                      <?php  endif; 
+                        endif;				
+				        $cont++;
+				    endforeach;
+				    else:?>
+				    <div class="timeline-entry">
+    					<div class="timeline-stat">
+    						<div class="timeline-icon bg-success">
+    							<i class="fa fa-thumbs-up fa-lg"></i>
+    						</div>
+    					</div>
+    					<div class="timeline-label">
+                            <strong>Actualmente no registra historial.</strong>
+    					</div>
+    				  </div>
+				    <?php endif;
+				endforeach; ?>
+				
+			</div>
+			<!--===================================================-->
+			<!-- End Timeline -->
+		</div>
+	</div>
+</div>
